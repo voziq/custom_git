@@ -89,6 +89,7 @@ gitlabAPICreateProject(){
                 existStatus=""
         if [[ $(isGitlabProjectExist "$gitlabProjectName") -eq 1 ]] || [[ $(isProjectDirExist "$gitlabProjectName") -eq 1 ]]; then
                 existStatus=1
+                exit 9
         else
                         apiRequest=$(curl -k --silent --connect-timeout 10 --no-keepalive \
                                         -XPOST --header "PRIVATE-TOKEN: $gitlabToken" "$gitlabURL/$projectApi/user/$gitlabUserId?name="$gitlabProjectName"&namespace_id=$gitlabProjectNamespaceId")

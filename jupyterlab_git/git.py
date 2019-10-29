@@ -604,16 +604,23 @@ class Git:
         Execute Create Project command & return the result.
         """
         user=os.environ['USER'] 
-        excute=os.path.dirname(os.path.abspath(__file__))+"/excute.sh"
+        excute=os.path.dirname(os.path.abspath(__file__))+"/execute.sh"
         p = subprocess.Popen(
             
             ["bash", excute ,str(os.path.join(self.root_dir, current_path)),str(Project_name),str(user)], stdout=PIPE, stderr=PIPE, cwd=os.path.join(self.root_dir, current_path)
         )
         _, error = p.communicate()
-        response = {"code": p.returncode}        
-        if p.returncode != 0:
-            response["message"] = "directory already exists".strip()
-        return response
+        response = {"code": p.returncode}
+        print (response)
+        print (error)      
+        if p.returncode == 0:
+          return response
+        elif p.returncode == 9:
+            response["message"] = "Directory already exists".strip()
+            return response
+        elif p.returncode != 9 and p.returncode != 0 :
+            response["message"] = "Internal Server Error".strip()
+            return response
 
     def _is_branch(self, reference_name):
         """Check if the given reference is a branch
