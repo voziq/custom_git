@@ -12,7 +12,7 @@ projectName="$2"
 projectUserName="$3"
 
 #Verify If Project Exists in GitLab
-isGitlabProjectExist(){
+isGitlabProjectExistNotInUse(){
         existStatus=""
         responseCode=""
         responseLength=""
@@ -26,6 +26,29 @@ isGitlabProjectExist(){
         else
                 existStatus=0
         fi
+        echo $existStatus
+}
+
+#Verify If Project Exists in GitLab
+isGitlabProjectExist(){
+        existStatus=""
+        responseCode=""
+        responseLength=""
+        apiRequest=$(curl -k --write-out "%{http_code};%{size_download}" --silent --connect-timeout 10 --no-keepalive --output /dev/null \
+                                        -XGET --header "PRIVATE-TOKEN: $gitlabToken" $gitlabURL/$projectApi?search="$1")
+										
+										  gitlabPrjId=$(echo $apiRequest | grep -Po '"name":.*?[^\\]"' | awk -F\: '{print $2}' | tr -d '""')			  
+        arr=("$gitlabPrjId") 					
+		for i in ${arr[*]}
+            do       
+		
+        if [ "$i" = "$gitlabProjectName" ]; then   
+echo "Strings are  equal $i  and $gitlabProjectName" 
+existStatus=1
+       
+        fi
+            done
+      
         echo $existStatus
 }
 

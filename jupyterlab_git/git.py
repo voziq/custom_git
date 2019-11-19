@@ -598,6 +598,26 @@ class Git:
             ["git", "init"], cwd=os.path.join(self.root_dir, current_path)
         )
         return my_output
+    
+    def delItem(self, current_path, Project_name):
+        """
+        Execute delete Project command & return the result.
+        """
+        user=os.environ['USER']
+        excute=os.path.dirname(os.path.abspath(__file__))+"/delete_project.sh"
+        p = subprocess.Popen(           
+            ["bash", excute ,str(os.path.join(self.root_dir, current_path)),str(Project_name),str(user)], stdout=PIPE, stderr=PIPE
+        )
+        _, error = p.communicate()
+        response = {"code": p.returncode}
+        if p.returncode == 0:
+          return response
+        elif p.returncode == 9:
+            response["message"] = "Not a valid Git Repository".strip()
+            return response
+        elif p.returncode != 9 and p.returncode != 0 :
+            response["message"] = "Internal Server Error".strip()
+            return response   
 
     def project(self, current_path,Project_name):
         """

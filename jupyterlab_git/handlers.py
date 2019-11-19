@@ -399,7 +399,7 @@ class GitInitHandler(GitHandler):
 
 class GitProjectHandler(GitHandler):
     """
-    Handler for 'git init'. Initializes a repository.
+    Handler for 'git project'. Initializes a repository.
     """
 
     def post(self):
@@ -408,7 +408,20 @@ class GitProjectHandler(GitHandler):
         """
         data = json.loads(self.request.body.decode("utf-8"))
         response = self.git.project(data["current_path"], data["Project_name"])
-        self.finish(json.dumps(response))		
+        self.finish(json.dumps(response))	
+        
+class GitDeleteItemHandler(GitHandler):
+    """
+    Handler for 'git delete'. Initializes a repository.
+    """
+
+    def post(self):
+        """
+        POST request handler, initializes a repository.
+        """
+        data = json.loads(self.request.body.decode("utf-8"))    
+        response = self.git.delItem(data["current_path"], data["Project_name"])
+        self.finish(json.dumps(response))	
 
 class GitAddAllUntrackedHandler(GitHandler):
     """
@@ -486,7 +499,8 @@ def setup_handlers(web_app):
         ("/git/log", GitLogHandler),
         ("/git/detailed_log", GitDetailedLogHandler),
         ("/git/init", GitInitHandler),
-        ("/git/project", GitProjectHandler),		
+        ("/git/project", GitProjectHandler),
+        ("/git/delItem", GitDeleteItemHandler),	
         ("/git/all_history", GitAllHistoryHandler),
         ("/git/add_all_untracked", GitAddAllUntrackedHandler),
         ("/git/clone", GitCloneHandler),
