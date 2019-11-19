@@ -2,13 +2,13 @@ import setuptools
 
 setuptools.setup(
      name='custom_git',  
-     version='4.1',
+     version='4.5',
      author="voziq",
      author_email="mgoli@voziq.com",
      description="A Docker and AWS utility package",
      url="https://github.com/voziq/custom-git",
      packages=setuptools.find_packages(),
-     scripts=['jupyterlab_git/excute.sh','jupyterlab_git/execute.sh'],
+     scripts=['jupyterlab_git/delete_project.sh','jupyterlab_git/execute.sh'],
      install_requires=[
         'notebook',
         'nbdime >= 1.1.0'
