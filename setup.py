@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
      name='custom_git',  
-     version='4.5',
+     version='4.6',
      author="voziq",
      author_email="mgoli@voziq.com",
      description="A Docker and AWS utility package",

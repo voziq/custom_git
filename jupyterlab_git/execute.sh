@@ -29,21 +29,31 @@ isGitlabProjectExistNotInUse(){
         echo $existStatus
 }
 
+#Get Projects Attributes From GitLab
+gitlabAPIGetProjectAttributes(){
+        gitlabPrjId=""
+        apiResponseUserId=
+        apiRequest=$(curl -k --write-out "%{http_code};%{size_download}" --silent --connect-timeout 10 --no-keepalive \
+                                        -XGET --header "PRIVATE-TOKEN: $gitlabToken" $gitlabURL/$projectApi?search="$1")
+        # gitlabUserId=$(echo $apiRequest | grep -o -E "\"id\":[0-9]+" | awk -F\: '{print $2}')
+	    gitlabPrjId=$(echo $apiRequest | grep -Po '"name":.*?[^\\]"' | awk -F\: '{print $2}' | tr -d '""')			  
+        echo $gitlabPrjId
+}
+
 #Verify If Project Exists in GitLab
 isGitlabProjectExist(){
         existStatus=""
         responseCode=""
         responseLength=""
-        apiRequest=$(curl -k --write-out "%{http_code};%{size_download}" --silent --connect-timeout 10 --no-keepalive --output /dev/null \
-                                        -XGET --header "PRIVATE-TOKEN: $gitlabToken" $gitlabURL/$projectApi?search="$1")
-										
-										  gitlabPrjId=$(echo $apiRequest | grep -Po '"name":.*?[^\\]"' | awk -F\: '{print $2}' | tr -d '""')			  
+		gitlabPrjId=""
+       
+                                       
+		gitlabPrjId=$(gitlabAPIGetProjectAttributes "$1")			  
         arr=("$gitlabPrjId") 					
 		for i in ${arr[*]}
             do       
 		
-        if [ "$i" = "$gitlabProjectName" ]; then   
-echo "Strings are  equal $i  and $gitlabProjectName" 
+        if [ "$i" = "$projectName" ]; then   
 existStatus=1
        
         fi
